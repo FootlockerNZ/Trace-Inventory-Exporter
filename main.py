@@ -2,12 +2,14 @@ import requests
 import csv
 import random
 import json
-import os
 import sys
 from datetime import datetime
 
 
+
 def getConfig():
+    print('Geting config...')
+
     try:
         file = open('config.json')
         config = json.loads(file.read())
@@ -21,20 +23,7 @@ def getConfig():
 
 def login():
     print('Logging in...')
-    headers = {
-        'accept': '*/*',
-        'accept-language': 'en-US,en;q=0.9',
-        'content-type': 'application/json',
-        'priority': 'u=1, i',
-        'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Windows"',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'cross-site',
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-    }
-
+    
     params = {
         'key': 'AIzaSyBH1NS5RuSMLekpp-SUrQCVa-cDbErzpo4',
     }
@@ -49,7 +38,7 @@ def login():
     response = requests.post(
         'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword',
         params=params,
-        headers=headers,
+        headers=HEADERS,
         json=json_data,
     )
 
@@ -57,19 +46,6 @@ def login():
 
 def getId():
     print('Getting auth...')
-    headers = {
-        'accept': '*/*',
-        'accept-language': 'en-US,en;q=0.9',
-        'content-type': 'application/json',
-        'priority': 'u=1, i',
-        'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Windows"',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'cross-site',
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-    }
 
     params = {
         'key': 'AIzaSyBH1NS5RuSMLekpp-SUrQCVa-cDbErzpo4',
@@ -82,7 +58,7 @@ def getId():
     r = requests.post(
         'https://www.googleapis.com/identitytoolkit/v3/relyingparty/getAccountInfo',
         params=params,
-        headers=headers,
+        headers=HEADERS,
         json=json_data,
     )
 
@@ -91,46 +67,18 @@ def getId():
 
 def getAccount():
     print('Getting account...')
-    headers = {
-        'accept': '*/*',
-        'accept-language': 'en-US,en;q=0.9',
-        'authorization': 'Bearer '+idToken,
-        'priority': 'u=1, i',
-        'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Windows"',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'cross-site',
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-    }
-
 
     r = requests.get(
         'https://fulltrace-server.onrender.com/api/consigners/UcLYhTOHNvWa8BJPCkdL0wofo892',
-        headers=headers
+        headers=HEADERS
     )
     
     return str(r.json()['data']['id'])
 
 
 
-
 def getInventory():
     print("Getting inventory...")
-    headers = {
-        'accept': '*/*',
-        'accept-language': 'en-US,en;q=0.9',
-        'authorization': 'Bearer '+idToken,
-        'priority': 'u=1, i',
-        'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Windows"',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'cross-site',
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-    }
 
     params = {
         'printed': '',
@@ -145,8 +93,14 @@ def getInventory():
         'search': '',
     }
 
-    r = requests.get('https://fulltrace-server.onrender.com/api/inventories', params=params, headers=headers)
+    r = requests.get(
+        'https://fulltrace-server.onrender.com/api/inventories', 
+        params=params, 
+        headers=HEADERS
+    )
+
     return r.json()['data']['inventories']
+    
 
 def writeFile():
     current_date = datetime.now().strftime('%Y-%m-%d')
@@ -160,9 +114,12 @@ def writeFile():
     print(f"Inventory written to: {file_name.split('\\')[-1]}")
 
 
+
+
 config = getConfig()
 
-tenants = [
+
+TENANTS = [
     {"store": "imyourwardrobe.com", "id": "ImYourWardrobe-oq9h0"},
     {"store": "cjkicksnz.com", "id": "cjkicks-h9zbu"},
     {"store": "kickitnz.com", "id": "kickitnz-3b4oy"},
@@ -171,28 +128,42 @@ tenants = [
     {"store": "bigboisneakers.com", "id":"bigdawg-jeec0"}
 ]
 
+
 while True:
+    HEADERS = {
+        'accept': '*/*',
+        'accept-language': 'en-US,en;q=0.9',
+        'content-type': 'application/json',
+        'priority': 'u=1, i',
+        'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'cross-site',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+    }
+
     print()
     print()
     print('Select store to export consignment inventory')
     print('--------------------------------------------')
     print()
 
-    for i in range(len(tenants)):
-        print(f'[{str(i+1)}] {tenants[i]['store']}')
+    for i in range(len(TENANTS)):
+        print(f'[{str(i+1)}] {TENANTS[i]['store']}')
 
     print()
     option = int(input('Enter store number (e.g 1 = imyourwardrobe.com): '))
-    store = tenants[option-1]['store']
-    storeId = tenants[option-1]['id']
+    store = TENANTS[option-1]['store']
+    storeId = TENANTS[option-1]['id']
     print()
     print()
 
     print(f'Getting inventory for store: {store}...')
 
-
-
     idToken = login()
+    HEADERS['authorization'] = 'Bearer '+ idToken
     localId = getId()
     consignerId = getAccount()
     inventory = getInventory()
