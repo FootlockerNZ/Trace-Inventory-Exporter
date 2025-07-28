@@ -63,12 +63,12 @@ You’ll be prompted to select the store whose inventory you want to export. The
 
 ## Supported Stores
 
-- imyourwardrobe.com  
-- cjkicksnz.com  
-- kickitnz.com  
-- basement.nz  
-- priorstoreofficial.com  
-- bigboisneakers.com
+- imyourwardrobe.com  (consign.imyourwardrobe.com)
+- cjkicksnz.com  (consign.cjkicksnz.com)
+- kickitnz.com  (consign.kickitnz.com)
+- basement.nz  (consign.basement.nz)
+- priorstoreofficial.com  (sell.priorstoreofficial.com)
+- bigboisneakers.com  (consign.bigboisneakers.com)
 
 ---
 
