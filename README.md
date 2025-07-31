@@ -50,7 +50,7 @@ mkdir History
 Execute the script from your terminal:
 
 ```bash
-python trace_inventory_export.py
+python main.py
 ```
 
 You’ll be prompted to select the store whose inventory you want to export. The resulting CSV will be saved in the `History/` folder with a name like:
